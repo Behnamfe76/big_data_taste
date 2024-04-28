@@ -1,5 +1,10 @@
 <?php
 
+use App\Http\Controllers\BigDataCachController;
+use App\Http\Controllers\BigDataCacheController;
+use App\Http\Controllers\BigDataCacheIndexController;
+use App\Http\Controllers\BigDataController;
+use App\Http\Controllers\BigDataIndexController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
@@ -14,9 +19,10 @@ Route::get('/', function () {
     ]);
 });
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+Route::resource('/ordinary-data', BigDataController::class)->middleware(['auth']);
+Route::resource('/indexed-data', BigDataIndexController::class)->middleware(['auth']);
+Route::resource('/cached-data', BigDataCacheController::class)->middleware(['auth']);
+Route::resource('/cached-indexed-data', BigDataCacheIndexController::class)->middleware(['auth']);
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -24,4 +30,4 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
